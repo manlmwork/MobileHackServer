@@ -88,7 +88,7 @@ public class FireBaseServiceImpl implements FireBaseService {
                     System.out.println("HuyTCM: mess = " + messageObj.getText());
                 }
 
-                
+
 //                if (!messageObj.getText().isEmpty()) {
 //                    // Do something
 //

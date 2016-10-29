@@ -4,6 +4,7 @@ import com.fu.api.model.BotInfo;
 import com.fu.api.model.CartInfo;
 import com.fu.api.model.PhoneInfo;
 import com.fu.api.service.IsmbRestService;
+import com.fu.bot.model.ChatMessage;
 import com.fu.bot.model.SaveData;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
@@ -44,7 +45,7 @@ public class IsmbRestController {
         LOG.info("[getCart] Start");
 
         if (ismbRestService.authenticate(deviceToken)) {
-            List<SaveData> productIdList = (List<SaveData>)ismbRestService.getCart(botInfo.getBotFbId());
+            List<SaveData> productIdList = (List<SaveData>) ismbRestService.getCart(botInfo.getBotFbId());
             LOG.info("[getCart] End");
             return new ResponseEntity<>(new Gson().toJson(productIdList), HttpStatus.OK);
         }
@@ -109,5 +110,17 @@ public class IsmbRestController {
 
         LOG.info("[getArea] End");
         return new ResponseEntity<>(new Gson().toJson(new ArrayList<>()), HttpStatus.FORBIDDEN);
+    }
+
+    @RequestMapping(value = "/uploadImg", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public ResponseEntity<String> uploadImg(@RequestBody ChatMessage chatMessage) {
+        LOG.info("[getArea] Start");
+
+        if (chatMessage != null) {
+            return new ResponseEntity<>(new Gson().toJson(ismbRestService.saveImg(chatMessage)), HttpStatus.OK);
+        }
+
+        LOG.info("[getArea] End");
+        return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
     }
 }

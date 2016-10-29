@@ -2,6 +2,8 @@ package com.fu.api.service.impl;
 
 import com.fu.api.model.*;
 import com.fu.api.service.IsmbRestService;
+import com.fu.bot.model.ChatMessage;
+import com.fu.bot.model.ProductResponse;
 import com.fu.bot.model.SaveData;
 import com.fu.bot.utils.Constant;
 import com.fu.cache.client.JedisClient;
@@ -11,6 +13,7 @@ import com.fu.database.entity.Customer;
 import com.fu.database.entity.DeviceToken;
 import com.fu.database.entity.History;
 import com.fu.database.entity.Product;
+import com.fu.storage.service.S3Service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +44,10 @@ public class IsmbRestServiceImpl implements IsmbRestService {
 
     private final HistoryDao historyDao;
 
+    private final S3Service s3Service;
+
     @Autowired
-    public IsmbRestServiceImpl(JedisClient jedisClient, DeviceTokenDao deviceTokenDao, CustomerDao customerDao, ProductDao productDao, BeaconDao beaconDao, AreaDao areaDao, HistoryDao historyDao) {
+    public IsmbRestServiceImpl(JedisClient jedisClient, DeviceTokenDao deviceTokenDao, CustomerDao customerDao, ProductDao productDao, BeaconDao beaconDao, AreaDao areaDao, HistoryDao historyDao, S3Service s3Service) {
         this.jedisClient = jedisClient;
         this.deviceTokenDao = deviceTokenDao;
         this.customerDao = customerDao;
@@ -50,6 +55,7 @@ public class IsmbRestServiceImpl implements IsmbRestService {
         this.beaconDao = beaconDao;
         this.areaDao = areaDao;
         this.historyDao = historyDao;
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -181,6 +187,14 @@ public class IsmbRestServiceImpl implements IsmbRestService {
         areaModel.setLastSync(DateUtil.getCurUTCInMilliseconds());
         LOG.info("[getArea] End");
         return areaModel;
+    }
+
+    @Override
+    public String saveImg(ChatMessage chatMessage) {
+        chatMessage.getMess().getImage();
+        String fileName = String.valueOf(DateUtil.getCurUTCInMilliseconds());
+
+        return s3Service.uploadObject("s3://manlm/" + fileName, chatMessage.getMess().getImage(), fileName);
     }
 
 

@@ -1,6 +1,8 @@
 package com.fu.api.service;
 
 import com.fu.api.model.*;
+import com.fu.bot.model.ChatMessage;
+import com.fu.bot.model.ProductResponse;
 import com.fu.bot.model.SaveData;
 import com.fu.database.entity.Area;
 import com.fu.database.model.BeaconApi;
@@ -26,4 +28,6 @@ public interface IsmbRestService {
     BeaconModel getBeacon();
 
     AreaModel getArea();
+
+    String saveImg(ChatMessage chatMessage);
 }

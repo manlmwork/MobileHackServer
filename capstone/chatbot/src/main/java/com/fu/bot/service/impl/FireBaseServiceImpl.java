@@ -106,9 +106,9 @@ public class FireBaseServiceImpl implements FireBaseService {
                         }
 
                         if (productList == null) {
-                            responeObj.setMessage("text");
+                            responeObj.setMess("text");
                         } else if(productList.isEmpty()){
-                            responeObj.setMessage("text");
+                            responeObj.setMess("text");
                         }else {
                             List<ProductObj> listProductObj = new ArrayList<>();
                             for (Product product: productList) {

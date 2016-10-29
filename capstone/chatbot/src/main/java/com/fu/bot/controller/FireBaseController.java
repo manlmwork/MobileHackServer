@@ -17,6 +17,8 @@ public class FireBaseController {
 
     private final FireBaseService fireBaseService;
 
+    private static boolean isStart = false;
+
     @Autowired
     public FireBaseController(FireBaseService fireBaseService) {
         this.fireBaseService = fireBaseService;
@@ -25,8 +27,11 @@ public class FireBaseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void firebaseInit() {
         LOG.info("[firebaseInit] Start");
-        fireBaseService.startFirebaseApp();
-        fireBaseService.registerDatabaseChildEventListener();
+        if (!isStart) {
+            fireBaseService.startFirebaseApp();
+            fireBaseService.registerDatabaseChildEventListener();
+            isStart = true;
+        }
         LOG.info("[firebaseInit] End");
 
     }

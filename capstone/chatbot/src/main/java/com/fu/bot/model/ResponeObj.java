@@ -7,14 +7,14 @@ import java.util.List;
  */
 public class ResponeObj {
 
-    private String name;
+    private String name = "SERVER";
 
     private String message;
 
     private List<ProductObj> productObjList;
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {

@@ -8,6 +8,7 @@ package com.fu.bot.model;
 public class MessageObj {
     private String text;
     private byte[] image;
+    private String thumb;
 
 
     public String getText() {
@@ -24,5 +25,13 @@ public class MessageObj {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
     }
 }

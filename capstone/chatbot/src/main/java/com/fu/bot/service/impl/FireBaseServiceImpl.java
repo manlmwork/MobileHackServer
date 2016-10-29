@@ -2,6 +2,8 @@ package com.fu.bot.service.impl;
 
 import com.fu.bot.model.ChatMessage;
 import com.fu.bot.model.MessageObj;
+import com.fu.bot.model.ProductObj;
+import com.fu.bot.model.ResponeObj;
 import com.fu.bot.service.AccentizerService;
 import com.fu.bot.service.FireBaseService;
 import com.fu.bot.utils.Constant;
@@ -17,6 +19,7 @@ import com.google.firebase.database.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.aspectj.bridge.Version.text;
@@ -41,18 +44,20 @@ public class FireBaseServiceImpl implements FireBaseService {
     }
 
     public List<Product> handleImageFromUser(byte[] imageData) {
-        List<Product> list;
+        logger.info("[handleImageFromUser] - Start");
         List<EntityAnnotation> logos = visionService.detectLogo(imageData, 0);
         String responseText = logos.get(0).getDescription();
-        list = productDao.getProductBySearchName(responseText, 0, 10);
 
-        return list;
+        List<Product> listProduct = productDao.getProductBySearchName(responseText, 0, 10);
+
+        logger.info("[handleImageFromUser] - End");
+        return listProduct;
     }
 
     public List<Product> handleTextFromUser(String textMessage) {
         LOG.info("[handleTextFromUser] Start ");
         // normal text
-        String responseText = naturalLanguageProcessingService.processSpeech(accentizerService.add(text));
+        String responseText = naturalLanguageProcessingService.processSpeech(accentizerService.add(textMessage));
         List<Product> list = productDao.getProductBySearchName(responseText, 0, 10);
 
         LOG.info("[handleTextFromUser] End ");
@@ -82,22 +87,44 @@ public class FireBaseServiceImpl implements FireBaseService {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
-                System.out.println("HuyTCM: text=" + chatMessage.getName());
-                MessageObj messageObj = chatMessage.getMess();
-                if (messageObj != null) {
-                    System.out.println("HuyTCM: mess = " + messageObj.getText());
+                logger.info("[onChildAdded] - Start: chatname=" + chatMessage.getName());
+                if (!chatMessage.getName().equalsIgnoreCase("SERVER")) {
+                    logger.info("[onChildAdded] - Check if SERVER - Start");
+                    MessageObj messageObj = chatMessage.getMess();
+                    if (messageObj != null) {
+                        System.out.println("HuyTCM: mess = " + messageObj.getText());
+                        ResponeObj responeObj = new ResponeObj();
+                        List<Product> productList = null;
+                        if (messageObj.getText() != null) {
+                            if (!messageObj.getText().isEmpty()) {
+                                productList = handleTextFromUser(messageObj.getText());
+                            }
+                        } else if (messageObj.getImage() != null) {
+                            if (messageObj.getImage().length > 0) {
+                                productList = handleImageFromUser(messageObj.getImage());
+                            }
+                        }
+
+                        if (productList == null) {
+                            responeObj.setMessage("text");
+                        } else if(productList.isEmpty()){
+                            responeObj.setMessage("text");
+                        }else {
+                            List<ProductObj> listProductObj = new ArrayList<>();
+                            for (Product product: productList) {
+                                ProductObj productObj = new ProductObj();
+                                productObj.setName(product.getName());
+                                productObj.setUrl(product.getImgUrl());
+
+                                listProductObj.add(productObj);
+                            }
+                            responeObj.setProductObjList(listProductObj);
+                        }
+                        saveDataToFirebaseDatabase(responeObj);
+                    }
+                    logger.info("[onChildAdded] - Check if SERVER - End");
                 }
-
-
-//                if (!messageObj.getText().isEmpty()) {
-//                    // Do something
-//
-//                } else if (messageObj.getImage() != null && messageObj.getImage().length > 0) {
-//                    // Do something
-//
-//                } else {
-//                    // Handle exception
-//                }
+                logger.info("[onChildAdded] - End");
             }
 
             @Override
@@ -123,13 +150,13 @@ public class FireBaseServiceImpl implements FireBaseService {
         logger.info("[registerEventListener] - End");
     }
 
-    private void saveDataToFirebaseDatabase(ChatMessage chatMessage) {
+    private void saveDataToFirebaseDatabase(ResponeObj respone) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("/");
 
         DatabaseReference userRef = ref.child(ref.push().getKey());
 
-        userRef.setValue(chatMessage);
+        userRef.setValue(respone);
     }
 
 

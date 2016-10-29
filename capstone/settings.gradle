@@ -1,0 +1,12 @@
+rootProject.name = 'capstone'
+rootProject.name = 'capstone'
+include 'database-service'
+include 'common'
+include 'web-service'
+include 'storage-service'
+include 'cache-service'
+include 'notification-service'
+include 'chatbot'
+include 'nlp-service'
+include 'vision-service'
+

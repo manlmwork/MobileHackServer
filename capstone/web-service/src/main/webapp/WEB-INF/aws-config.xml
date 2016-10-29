@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/cloud/aws/context
+        http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <aws-context:context-region region="${aws.region}"/>
+
+    <aws-context:context-credentials>
+        <aws-context:simple-credentials access-key="${aws.access.key}"
+                                        secret-key="${aws.secret.key}"/>
+    </aws-context:context-credentials>
+
+    <task:executor id="executor" pool-size="${s3.pool.size}"
+                   queue-capacity="${s3.queue.capacity}" rejection-policy="CALLER_RUNS"/>
+    <aws-context:context-resource-loader task-executor="executor"/>
+
+</beans>

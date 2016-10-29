@@ -1,0 +1,26 @@
+group 'capstone'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+def javax_validation_version = '1.1.0.Final'
+def api_ai_version = '1.1.0'
+
+dependencies {
+
+    compile project(':common')
+
+    compile group: 'javax.validation', name: 'validation-api', version: javax_validation_version
+
+    // api.ai
+    compile group: 'ai.api', name: 'libai', version: api_ai_version
+}

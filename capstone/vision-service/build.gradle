@@ -1,0 +1,26 @@
+group 'capstone'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+def gg_vision_version = 'v1-rev26-1.22.0'
+def gg_api_client_version = '1.22.0'
+
+dependencies {
+    compile project(':common')
+
+    // https://mvnrepository.com/artifact/com.google.apis/google-api-services-vision
+    compile group: 'com.google.apis', name: 'google-api-services-vision', version: gg_vision_version
+
+    // https://mvnrepository.com/artifact/com.google.api-client/google-api-client
+    compile group: 'com.google.api-client', name: 'google-api-client', version: gg_api_client_version
+}

@@ -1,0 +1,39 @@
+group 'capstone'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+def jackson_version = '2.8.1'
+
+dependencies {
+    // database
+    compile project(':database-service')
+
+    // storage
+    compile project(':storage-service')
+
+    // cache
+    compile project(':cache-service')
+
+    // notification
+    compile project(':notification-service')
+
+    // chatbot
+    compile project(':chatbot')
+
+    // vision-service
+    compile project(':vision-service')
+
+    // auto convert to json
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
+}

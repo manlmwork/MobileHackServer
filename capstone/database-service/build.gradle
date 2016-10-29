@@ -1,0 +1,47 @@
+group 'capstone'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+def spring_version = '4.3.2.RELEASE'
+def javax_servlet_api_version = '3.1.0'
+def jsp_api = '2.2'
+def mysql_connector_version = '6.0.3'
+def hibernate_version = '5.2.1.Final'
+def hibernate_validator_version = '5.2.4.Final'
+def dbcp_version = '8.5.3'
+
+dependencies {
+
+    compile project(':common')
+
+    // Spring mvc
+    compile group: 'org.springframework', name: 'spring-core', version: spring_version
+    compile group: 'org.springframework', name: 'spring-aspects', version: spring_version
+    compile group: 'org.springframework', name: 'spring-orm', version: spring_version
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: javax_servlet_api_version
+    compile group: 'javax.servlet.jsp', name: 'jsp-api', version: jsp_api
+    compile group: 'org.springframework', name: 'spring-webmvc', version: spring_version
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.1.RELEASE'
+
+    // mysql
+    compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_version
+
+    // hibernate
+    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: hibernate_version
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: hibernate_validator_version
+
+    // database connection pool
+    compile group: 'org.apache.tomcat', name: 'tomcat-dbcp', version: dbcp_version
+}

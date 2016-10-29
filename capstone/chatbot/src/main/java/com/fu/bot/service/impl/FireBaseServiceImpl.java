@@ -1,5 +1,6 @@
 package com.fu.bot.service.impl;
 
+import com.amazonaws.services.dynamodbv2.xspec.NULL;
 import com.fu.bot.model.ChatMessage;
 import com.fu.bot.model.MessageObj;
 import com.fu.bot.service.FireBaseService;
@@ -9,6 +10,9 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class FireBaseServiceImpl implements FireBaseService {
@@ -45,6 +49,26 @@ public class FireBaseServiceImpl implements FireBaseService {
                 if (messageObj != null) {
                     System.out.println("HuyTCM: mess = " + messageObj.getText());
                 }
+
+                ChatMessage chatMessage1 = new ChatMessage();
+                chatMessage1.setName("SERVER");
+
+                MessageObj obj = new MessageObj();
+                messageObj.setText("HELLO MY NAME IS SERVER");
+
+                chatMessage1.setMess(obj);
+
+                saveDataToFirebaseDatabase(chatMessage1);
+                if (!messageObj.getText().isEmpty()) {
+                    // Do something
+
+                } else if (messageObj.getImage() != null && messageObj.getImage().length > 0) {
+                    // Do something
+
+                } else {
+                    // Handle exception
+                }
+
             }
 
             @Override
@@ -70,7 +94,14 @@ public class FireBaseServiceImpl implements FireBaseService {
         logger.info("[registerEventListener] - End");
     }
 
-    private void saveDataToFirebaseDatabase() {
+    private void saveDataToFirebaseDatabase(ChatMessage chatMessage) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("/");
 
+        DatabaseReference userRef = ref.child("name");
+
+        userRef.setValue(chatMessage);
     }
+
+
 }

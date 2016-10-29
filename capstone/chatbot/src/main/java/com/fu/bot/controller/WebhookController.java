@@ -2,6 +2,7 @@ package com.fu.bot.controller;
 
 import com.fu.bot.service.FacebookAPIService;
 import com.fu.bot.service.FacebookMessageService;
+import com.fu.bot.service.FireBaseService;
 import com.fu.bot.utils.FirebaseUtils;
 import com.fu.cache.client.JedisClient;
 import com.fu.common.constant.KeyConstant;
@@ -31,6 +32,7 @@ public class WebhookController {
     private final FacebookMessageService facebookMessageService;
 
 
+
     @Autowired
     public WebhookController(Properties properties, FacebookAPIService facebookAPIService, FacebookMessageService facebookMessageService, JedisClient jedisClient) {
         this.properties = properties;
@@ -39,14 +41,7 @@ public class WebhookController {
 
     }
 
-    @RequestMapping(value = "/firebaseUtils")
-    public void initFirebase() {
-        try {
-            FirebaseUtils.initialFirebaseApp();
-        } catch (FileNotFoundException e) {
-            LOG.error(e);
-        }
-    }
+
 
     @RequestMapping(value = "/webhook", method = RequestMethod.GET)
     public void webhookGet(@RequestParam(name = "hub.verify_token") String verifyToken,

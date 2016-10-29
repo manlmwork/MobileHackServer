@@ -2,6 +2,7 @@ package com.fu.bot.controller;
 
 import com.fu.bot.service.FacebookAPIService;
 import com.fu.bot.service.FacebookMessageService;
+import com.fu.bot.utils.FirebaseUtils;
 import com.fu.cache.client.JedisClient;
 import com.fu.common.constant.KeyConstant;
 import com.fu.common.util.AESUtil;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -35,6 +37,15 @@ public class WebhookController {
         this.facebookAPIService = facebookAPIService;
         this.facebookMessageService = facebookMessageService;
 
+    }
+
+    @RequestMapping(value = "/firebaseUtils")
+    public void initFirebase() {
+        try {
+            FirebaseUtils.initialFirebaseApp();
+        } catch (FileNotFoundException e) {
+            LOG.error(e);
+        }
     }
 
     @RequestMapping(value = "/webhook", method = RequestMethod.GET)
@@ -78,6 +89,8 @@ public class WebhookController {
                             HttpServletResponse response) throws InterruptedException {
         LOG.info("[webhookPost] Start");
         facebookMessageService.handleFacebookMessageFromUser(request, response);
+
+
 
         LOG.info("[webhookPost] End");
     }

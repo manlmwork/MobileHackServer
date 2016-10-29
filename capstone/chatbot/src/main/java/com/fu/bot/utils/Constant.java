@@ -20,6 +20,8 @@ public class Constant {
 
     public static final int TEXT_INPUT_HISTORY = 1;
 
+    public static final String FIREBASE_DATABASE_URL = "https://ismbhack.firebaseio.com/";
+
     public enum SHORT_KEY {
         TYPE("@"), SHOW_CART("@gh"), RESET("@xoa"), HISTORY("@ls"), PROMOTION("@km");
 

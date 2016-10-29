@@ -182,4 +182,6 @@ public class IsmbRestServiceImpl implements IsmbRestService {
         LOG.info("[getArea] End");
         return areaModel;
     }
+
+
 }

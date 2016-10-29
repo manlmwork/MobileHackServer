@@ -92,7 +92,7 @@ public class FireBaseServiceImpl implements FireBaseService {
                 chatMessage1.setName("SERVER");
 
                 MessageObj obj = new MessageObj();
-                messageObj.setText("HELLO MY NAME IS SERVER");
+                obj.setText("HELLO MY NAME IS SERVER");
 
                 chatMessage1.setMess(obj);
 

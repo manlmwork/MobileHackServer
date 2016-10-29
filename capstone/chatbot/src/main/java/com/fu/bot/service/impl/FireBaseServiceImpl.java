@@ -88,25 +88,16 @@ public class FireBaseServiceImpl implements FireBaseService {
                     System.out.println("HuyTCM: mess = " + messageObj.getText());
                 }
 
-                ChatMessage chatMessage1 = new ChatMessage();
-                chatMessage1.setName("SERVER");
-
-                MessageObj obj = new MessageObj();
-                messageObj.setText("HELLO MY NAME IS SERVER");
-
-                chatMessage1.setMess(obj);
-
-                saveDataToFirebaseDatabase(chatMessage1);
-                if (!messageObj.getText().isEmpty()) {
-                    // Do something
-
-                } else if (messageObj.getImage() != null && messageObj.getImage().length > 0) {
-                    // Do something
-
-                } else {
-                    // Handle exception
-                }
-
+                
+//                if (!messageObj.getText().isEmpty()) {
+//                    // Do something
+//
+//                } else if (messageObj.getImage() != null && messageObj.getImage().length > 0) {
+//                    // Do something
+//
+//                } else {
+//                    // Handle exception
+//                }
             }
 
             @Override
@@ -136,7 +127,7 @@ public class FireBaseServiceImpl implements FireBaseService {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("/");
 
-        DatabaseReference userRef = ref.child("name");
+        DatabaseReference userRef = ref.child(ref.push().getKey());
 
         userRef.setValue(chatMessage);
     }
